@@ -1,3 +1,4 @@
+use std::io::Write;
 // Uncomment this block to pass the first stage
 use std::net::TcpListener;
 
@@ -11,8 +12,12 @@ fn main() {
 
     for stream in listener.incoming() {
         match stream {
-            Ok(_stream) => {
+            Ok(mut stream) => {
                 println!("accepted new connection");
+                match stream.write_all("+PONG\r\n".as_bytes()) {
+                    Ok(_) => {println!("success")}
+                    Err(e) => {println!("Error {}", e)}
+                }
             }
             Err(e) => {
                 println!("error: {}", e);
